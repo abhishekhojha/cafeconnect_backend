@@ -14,6 +14,9 @@ app.use(express.json());
 const { AuthRoutes } = require("./Auth");
 app.use("/auth", AuthRoutes);
 
+const RestaurantRoutes = require("./Restaurant/RestaurantRoutes");
+app.use("/restaurant", RestaurantRoutes);
+
 app.use("/", (req, res) => {
   return res.send("Welcome to the API");
 });
