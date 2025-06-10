@@ -14,8 +14,8 @@ async function createRestaurant(req, res) {
     });
     await newRestaurant.save();
     return res
-      .stauts(201)
-      .json({ message: "Restaurant Created Succesfully", data: newRestaurant });
+      .status(201)
+      .json({ message: "Restaurant Created Successfully", data: newRestaurant });
   } catch (error) {
     return res
       .status(500)
@@ -25,8 +25,8 @@ async function createRestaurant(req, res) {
 
 async function getAllRestaurant(req, res) {
   try {
-    let limit = parseInt(req.limit) || 10;
-    let page = parseInt(req.page) || 1;
+    let limit = parseInt(req.query.limit) || 10;
+    let page = parseInt(req.query.page) || 1;
     let skip = (page - 1) * limit;
     let totalPage = await Restaurant.countDocuments();
     const restaurant = await Restaurant.find()
@@ -83,7 +83,7 @@ async function updateRestaurant() {
     if (!restaurant) {
       return res.status(404).json({ message: "Restaurant not found" });
     }
-    res.status(200).json({ message: "Restaurant updated", restaurant });
+    return res.status(200).json({ message: "Restaurant updated", restaurant });
   } catch (error) {
     if(error.name == "ValidationError"){
         return res.status(400).json({ 
@@ -91,7 +91,7 @@ async function updateRestaurant() {
         errors: Object.values(error.errors).map(err => err.message) 
       });
     }
-    res.status(500).json({ message: "Server Error", error: error.message });
+    return res.status(500).json({ message: "Server Error", error: error.message });
   }
 }
 
@@ -103,9 +103,9 @@ async function deleteRestaurant(req, res) {
     }
 
     await restaurant.deleteOne();
-    res.status(200).json({ message: "Restaurant deleted" });
+    return res.status(200).json({ message: "Restaurant deleted" });
   } catch (error) {
-    res.status(500).json({ message: "Server Error", error: error.message });
+    return res.status(500).json({ message: "Server Error", error: error.message });
   }
 }
 

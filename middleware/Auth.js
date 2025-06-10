@@ -20,14 +20,15 @@ async function protect(req, res, next) {
     return res.status(401).json({ message: "Invalid token" });
   }
 }
-async function roleProtect(roles) {
-  return async (req, res, next) => {
-    if (!req.user || !req.user.role || !roles.includes(req.user.role)) {
-      return res.status(403).json({ message: "Access denied" });
+function roleProtect(allowedRoles) {
+  return (req, res, next) => {
+    if (!allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({ message: "Forbidden" });
     }
     next();
   };
 }
+
 
 module.exports = {
   protect,
